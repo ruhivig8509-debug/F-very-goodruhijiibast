@@ -10,3 +10,5 @@ services:
         sync: false
       - key: DATABASE_URL
         sync: false
+      - key: PORT
+        value: 10000
