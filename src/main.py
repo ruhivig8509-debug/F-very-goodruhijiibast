@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import os
 import threading
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from aiogram import Bot, Dispatcher
@@ -23,16 +24,15 @@ class HealthHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-Type", "text/plain")
         self.end_headers()
-        self.wfile.write("Ruhi Ji Bot is alive! \U0001f940".encode())
+        self.wfile.write(b"OK")
 
     def log_message(self, format, *args):
-        pass  # Suppress noisy request logs
+        pass
 
 
-def run_web_server():
-    port = 10000
+def run_web_server(port: int):
     server = HTTPServer(("0.0.0.0", port), HealthHandler)
-    logger.info(f"Web server running on port {port}")
+    logger.info(f"Web server listening on 0.0.0.0:{port}")
     server.serve_forever()
 
 
@@ -65,9 +65,16 @@ async def main():
 
 
 if __name__ == "__main__":
-    # Web server PEHLE start karo — Render port scan karta hai
-    web_thread = threading.Thread(target=run_web_server, daemon=True)
+    # Render PORT env var use karo — fallback 10000
+    PORT = int(os.environ.get("PORT", 10000))
+
+    # Web server PEHLE start — Render is port ka wait karta hai
+    web_thread = threading.Thread(target=run_web_server, args=(PORT,), daemon=True)
     web_thread.start()
+
+    # Thoda wait karo port bind hone ke liye
+    import time
+    time.sleep(1)
 
     try:
         asyncio.run(main())
