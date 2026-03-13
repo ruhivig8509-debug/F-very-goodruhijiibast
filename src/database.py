@@ -1,20 +1,23 @@
 import logging
+import ssl
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from src.config import DATABASE_URL
 from src.models import Base
 
 logger = logging.getLogger(__name__)
 
-# Create async database engine
+# ssl=True required for NeonDB/asyncpg (sslmode=require replaced this way)
+ssl_ctx = ssl.create_default_context()
+
 engine = create_async_engine(
     DATABASE_URL,
     echo=False,
     pool_pre_ping=True,
     pool_size=10,
-    max_overflow=20
+    max_overflow=20,
+    connect_args={"ssl": ssl_ctx},
 )
 
-# Create session factory
 AsyncSessionLocal = async_sessionmaker(
     bind=engine,
     class_=AsyncSession,
@@ -26,7 +29,6 @@ async def init_db():
     """Initialize database schema."""
     try:
         async with engine.begin() as conn:
-            # Create tables if they don't exist
             await conn.run_sync(Base.metadata.create_all)
         logger.info("Database initialized successfully.")
     except Exception as e:
@@ -34,7 +36,6 @@ async def init_db():
         raise
 
 async def get_db_session() -> AsyncSession:
-    """Dependency to get database session."""
     async with AsyncSessionLocal() as session:
         try:
             yield session

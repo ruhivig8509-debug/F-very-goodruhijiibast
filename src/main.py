@@ -17,22 +17,22 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-# ── Fake Web Server (Render ke liye) ─────────────────────────────────────
+# ── Fake Web Server ───────────────────────────────────────────────────────
 class HealthHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
         self.send_header("Content-Type", "text/plain")
         self.end_headers()
-        self.wfile.write(b"Ruhi Ji Bot is alive! \xf0\x9f\xa5\x80")
+        self.wfile.write("Ruhi Ji Bot is alive! \U0001f940".encode())
 
     def log_message(self, format, *args):
-        pass  # Suppress request logs
+        pass  # Suppress noisy request logs
 
 
 def run_web_server():
-    port = 10000  # Render default port
+    port = 10000
     server = HTTPServer(("0.0.0.0", port), HealthHandler)
-    logger.info(f"Fake web server running on port {port}")
+    logger.info(f"Web server running on port {port}")
     server.serve_forever()
 
 
@@ -65,7 +65,7 @@ async def main():
 
 
 if __name__ == "__main__":
-    # Web server alag thread mein chalao
+    # Web server PEHLE start karo — Render port scan karta hai
     web_thread = threading.Thread(target=run_web_server, daemon=True)
     web_thread.start()
 
