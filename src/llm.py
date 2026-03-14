@@ -38,7 +38,7 @@ NVIDIA_PROVIDERS = [
         "api_key": "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",
         "temperature": 1,
         "top_p": 0.95,
-        "max_tokens": 8192,
+        "max_tokens": 4540,
         "extra_body": {"chat_template_kwargs": {"thinking": True}},
     },
     {
@@ -47,7 +47,7 @@ NVIDIA_PROVIDERS = [
         "api_key": "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",
         "temperature": 1,
         "top_p": 0.95,
-        "max_tokens": 16384,
+        "max_tokens": 4504,
         "extra_body": {
             "chat_template_kwargs": {"enable_thinking": True},
             "reasoning_budget": 16384,
@@ -59,7 +59,7 @@ NVIDIA_PROVIDERS = [
         "api_key": "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",
         "temperature": 0.7,
         "top_p": 0.8,
-        "max_tokens": 4096,
+        "max_tokens": 5809,
         "extra_body": {},
     },
 ]
@@ -73,7 +73,7 @@ NVIDIA_VISION_PROVIDER = {
     "temperature": 0.60,
     "top_p": 0.95,
     "top_k": 20,
-    "max_tokens": 16384,
+    "max_tokens": 5797,
 }
 
 
